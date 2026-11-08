@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Diwali 🪔</title>
+<style>
+:root{--bg:#12041f;--gold:#ffc83d;--orange:#ff7a1a;--pink:#ff3d8b;--txt:#fff6e0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#12041f}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(circle at 50% 100%,#4a1a6b,var(--bg) 70%);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.stars i{position:fixed;width:3px;height:3px;background:#fff;border-radius:50%;animation:tw 2s infinite alternate;z-index:0}
+@keyframes tw{from{opacity:.1}to{opacity:1}}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;z-index:2}
+.screen.on{display:flex;animation:in .8s ease}
+@keyframes in{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:none}}
+h1{font-size:clamp(34px,9vw,64px);margin:8px 0;background:linear-gradient(90deg,var(--gold),var(--pink),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent;animation:glow 2s infinite alternate}
+@keyframes glow{from{filter:drop-shadow(0 0 4px #ff9)}to{filter:drop-shadow(0 0 18px #f6a)}}
+h2{margin:6px 0;font-size:clamp(22px,6vw,34px);color:var(--gold)}
+p{font-size:clamp(15px,4vw,20px);max-width:460px;line-height:1.5;margin:6px 0 14px}
+.big{font-size:84px;animation:bounce 1.4s infinite}
+@keyframes bounce{50%{transform:translateY(-14px) scale(1.1)}}
+button{font-size:18px;font-weight:700;padding:14px 30px;border:0;border-radius:40px;background:linear-gradient(135deg,var(--gold),var(--orange));color:#3a0b00;box-shadow:0 0 22px #ff9a2e99;cursor:pointer;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{transform:scale(1.07)}}
+.dots{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:3}
+.dots b{width:10px;height:10px;border-radius:50%;background:#ffffff33;transition:.4s}
+.dots b.a{background:var(--gold);box-shadow:0 0 10px var(--gold);transform:scale(1.3)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:10px 0 16px}
+.dia{font-size:54px;cursor:pointer;filter:grayscale(1) brightness(.6);transition:.5s;user-select:none}
+.dia.lit{filter:none;animation:flick .3s infinite alternate;text-shadow:0 0 30px #ff9}
+@keyframes flick{to{transform:scale(1.12) rotate(3deg)}}
+#rangoli{width:min(72vw,300px);height:min(72vw,300px);border-radius:50%;background:#00000055;margin:6px 0 14px}
+.sw{font-size:46px;margin:0 6px;display:inline-block;animation:bounce 1.2s infinite}
+.sw:nth-child(2){animation-delay:.2s}.sw:nth-child(3){animation-delay:.4s}.sw:nth-child(4){animation-delay:.6s}
+.card{background:#ffffff14;border:1px solid #ffffff30;backdrop-filter:blur(6px);border-radius:22px;padding:18px 20px;margin-top:12px}
+.card a{color:var(--gold);font-weight:700;text-decoration:none}
+.fl{position:fixed;bottom:-60px;font-size:28px;z-index:1;pointer-events:none;animation:up linear forwards}
+@keyframes up{to{transform:translateY(-115vh) rotate(40deg);opacity:0}}
+#snd{position:fixed;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:5;width:46px;height:46px;padding:0;font-size:20px;animation:none}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<canvas id="c"></canvas>
+<div class="dots" id="dots"></div>
+<button id="snd" title="Sound">🔊</button>
+
+<div class="screen on" id="s0">
+  <div class="big">🪔</div>
+  <h1>Diwali Special</h1>
+  <p>The festival of lights is here! Let’s celebrate Diwali together, step by step ✨</p>
+  <button onclick="next()">Let’s Begin 🎇</button>
+</div>
+
+<div class="screen" id="s1">
+  <div class="big">🧹</div>
+  <h2>Step 1: Clean the House</h2>
+  <p>We clean our homes before Diwali to welcome Goddess Lakshmi. Tap the dust to sweep it away!</p>
+  <div class="grid" id="dust"></div>
+  <button id="b1" onclick="next()" style="display:none">Next Step ➡️</button>
+</div>
+
+<div class="screen" id="s2">
+  <h2>Step 2: Make a Rangoli 🎨</h2>
+  <p>Use your finger or mouse to fill the rangoli with colors 🌈</p>
+  <canvas id="rangoli" style="position:static;pointer-events:auto;touch-action:none"></canvas>
+  <button onclick="next()">Next Step ➡️</button>
+</div>
+
+<div class="screen" id="s3">
+  <h2>Step 3: Light the Diyas 🪔</h2>
+  <p>Tap each diya to light it up</p>
+  <div class="grid" id="diyas"></div>
+  <button id="b3" onclick="next()" style="display:none">Next Step ➡️</button>
+</div>
+
+<div class="screen" id="s4">
+  <div class="big">🙏</div>
+  <h2>Step 4: Lakshmi Puja</h2>
+  <p>Offer the aarti to Ganesh and Lakshmi during the auspicious time. Tap to ring the bell 🔔</p>
+  <div style="font-size:60px">🔔 🪷 🔔</div>
+  <button onclick="bell();burst(3);this.textContent='Jai Maa Lakshmi! 🙏';setTimeout(next,1800)">Perform Aarti 🔔</button>
+</div>
+
+<div class="screen" id="s5">
+  <h2>Step 5: Sweet Time 🍬</h2>
+  <p>Share sweets and sweeten everyone’s day!</p>
+  <div><span class="sw">🍬</span><span class="sw">🍮</span><span class="sw">🥮</span><span class="sw">🍩</span></div>
+  <button style="margin-top:18px" onclick="next()">Start the Celebration! 🎆</button>
+</div>
+
+<div class="screen" id="s6">
+  <div class="big">🎆</div>
+  <h1>Happy Diwali! 🪔</h1>
+  <p>Wishing you and your whole family a very Happy Diwali! May this festival of lights fill your life with joy, love and success 💛🎉</p>
+  <button onclick="burst(8);cheer();rain()">Celebrate More 🎊</button>
+  <div class="card">
+    <div style="opacity:.8;font-size:14px">Powered by</div>
+    <div style="font-size:22px;font-weight:800;color:var(--gold)">@rpitt</div>
+    <a href="https://t.me/arpit_maurya11" target="_blank" rel="noopener">✈️ Telegram: t.me/arpit_maurya11</a>
+  </div>
+</div>
+
+<script>
+var cur=0,N=7,muted=false,AC=null,mi=null;
+var $=function(i){return document.getElementById(i)};
+// stars + dots
+for(var i=0;i<60;i++){var s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=Math.random()*2+'s';$('stars').appendChild(s)}
+for(i=0;i<N;i++){$('dots').appendChild(document.createElement('b'))}
+function setDots(){var d=$('dots').children;for(var i=0;i<N;i++)d[i].className=i<=cur?'a':''}
+setDots();
+// audio
+function ac(){if(!AC){var C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,t,d,type,v){var a=ac();if(!a||muted)return;var o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(0,a.currentTime+t);g.gain.linearRampToValueAtTime(v||.15,a.currentTime+t+.02);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+t+d);o.connect(g);g.connect(a.destination);o.start(a.currentTime+t);o.stop(a.currentTime+t+d+.05)}
+function noise(d,v){var a=ac();if(!a||muted)return;var b=a.createBuffer(1,a.sampleRate*d,a.sampleRate),x=b.getChannelData(0);for(var i=0;i<x.length;i++)x[i]=(Math.random()*2-1)*Math.pow(1-i/x.length,2);var s=a.createBufferSource(),g=a.createGain();g.gain.value=v||.3;s.buffer=b;s.connect(g);g.connect(a.destination);s.start()}
+function pop(){tone(520+Math.random()*300,0,.15,'triangle',.12)}
+function bell(){[880,1320,1760].forEach(function(f,i){tone(f,i*.05,1.6,'sine',.12)})}
+function boom(){noise(.7,.35);tone(90,0,.4,'sine',.3)}
+function cheer(){[523,659,784,1047].forEach(function(f,i){tone(f,i*.12,.5,'triangle',.15)})}
+function melody(){var n=[392,440,523,587,659,587,523,440],k=0;if(mi)clearInterval(mi);mi=setInterval(function(){if(!muted){tone(n[k%8],0,.35,'sine',.05);if(k%4==0)tone(n[k%8]/2,0,.7,'triangle',.05)}k++},420)}
+$('snd').onclick=function(){muted=!muted;this.textContent=muted?'🔇':'🔊'};
+// fireworks
+var cv=$('c'),x=cv.getContext('2d'),P=[];
+function rs(){cv.width=innerWidth;cv.height=innerHeight}rs();addEventListener('resize',rs);
+function fw(px,py){var h=Math.random()*360,n=60;for(var i=0;i<n;i++){var a=Math.PI*2*i/n,s=2+Math.random()*4;P.push({x:px,y:py,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1,c:'hsl('+(h+Math.random()*50)+',100%,60%)'})}}
+function burst(n){for(var i=0;i<n;i++)(function(i){setTimeout(function(){fw(innerWidth*(.15+Math.random()*.7),innerHeight*(.15+Math.random()*.4));boom()},i*350)})(i)}
+function loop(){x.fillStyle='rgba(18,4,31,.22)';x.globalCompositeOperation='source-over';x.clearRect(0,0,cv.width,cv.height);x.globalCompositeOperation='lighter';
+for(var i=P.length-1;i>=0;i--){var p=P[i];p.x+=p.vx;p.y+=p.vy;p.vy+=.05;p.vx*=.99;p.l-=.013;if(p.l<=0){P.splice(i,1);continue}x.globalAlpha=p.l;x.fillStyle=p.c;x.beginPath();x.arc(p.x,p.y,2.4,0,7);x.fill()}
+x.globalAlpha=1;requestAnimationFrame(loop)}loop();
+// floating emojis
+function rain(){var e=['🪔','✨','🎆','🎇','🎉','💛','🪷','🧨','🎊','🌟'];for(var i=0;i<28;i++)(function(i){setTimeout(function(){var d=document.createElement('div');d.className='fl';d.textContent=e[Math.floor(Math.random()*e.length)];d.style.left=Math.random()*95+'%';d.style.animationDuration=(4+Math.random()*4)+'s';document.body.appendChild(d);setTimeout(function(){d.remove()},8500)},i*130)})(i)}
+// flow
+function next(){ac();if(!mi)melody();pop();$('s'+cur).classList.remove('on');cur++;setDots();$('s'+cur).classList.add('on');
+if(cur==2)initRangoli();
+if(cur==6){cheer();burst(10);rain();setInterval(function(){fw(Math.random()*innerWidth,Math.random()*innerHeight*.6);boom()},1800);setInterval(rain,6000)}}
+// step 1 dust
+var dc=0,dt=6;
+for(i=0;i<dt;i++){var d=document.createElement('div');d.className='dia';d.style.filter='none';d.textContent=['🍂','🕸️','💨','🍂','🕸️','💨'][i];d.onclick=function(){if(this.dataset.x)return;this.dataset.x=1;this.textContent='✨';pop();if(++dc==dt){cheer();$('b1').style.display='inline-block'}};$('dust').appendChild(d)}
+// step 2 rangoli
+var ri=false;
+function initRangoli(){if(ri)return;ri=true;var r=$('rangoli'),g=r.getContext('2d');r.width=r.height=300;
+g.strokeStyle='#ffffff40';for(var k=1;k<=5;k++){g.beginPath();g.arc(150,150,k*28,0,7);g.stroke()}
+var dr=false,cols=['#ff3d8b','#ffc83d','#ff7a1a','#3de0ff','#9d6bff','#4dff9a'],ci=0;
+function pt(e){var b=r.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return[(t.clientX-b.left)*300/b.width,(t.clientY-b.top)*300/b.height]}
+function paint(e){if(!dr)return;e.preventDefault();var p=pt(e);ci=(ci+1)%cols.length;for(var m=0;m<6;m++){var a=m*Math.PI/3,dx=p[0]-150,dy=p[1]-150,c=Math.cos(a),s=Math.sin(a);g.fillStyle=cols[(ci+m)%6];g.beginPath();g.arc(150+dx*c-dy*s,150+dx*s+dy*c,5,0,7);g.fill()}if(ci%8==0)pop()}
+['mousedown','touchstart'].forEach(function(n){r.addEventListener(n,function(e){dr=true;paint(e)})});
+['mousemove','touchmove'].forEach(function(n){r.addEventListener(n,paint,{passive:false})});
+['mouseup','touchend','mouseleave'].forEach(function(n){r.addEventListener(n,function(){dr=false})})}
+// step 3 diyas
+var lc=0,lt=9;
+for(i=0;i<lt;i++){var q=document.createElement('div');q.className='dia';q.textContent='🪔';q.onclick=function(){if(this.classList.contains('lit'))return;this.classList.add('lit');tone(660+lc*60,0,.5,'triangle',.15);if(++lc==lt){cheer();burst(3);$('b3').style.display='inline-block'}};$('diyas').appendChild(q)}
+</script>
+</body>
+</html>
